@@ -14,11 +14,11 @@ export class SignInController {
 
   @Post()
   async handle(@ValidatedBody() body: SignInDTO) {
-    const result = await this.useCase.execute(body);
+    const { user, tokens } = await this.useCase.execute(body);
 
     return {
-      user: UserMapper.toDTO(result.user),
-      tokens: result.tokens,
+      tokens,
+      user: UserMapper.toDTO(user),
     };
   }
 }

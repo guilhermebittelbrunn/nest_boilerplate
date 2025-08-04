@@ -23,7 +23,7 @@ describe('UpdateUserController (e2e)', () => {
 
       const result = await request()
         .put(`/v1/user/${user.id}`)
-        .set('authorization', authInfos.jwt)
+        .set('authorization', `Bearer ${authInfos.access_token}`)
         .send({
           name: newName,
         })
@@ -45,7 +45,7 @@ describe('UpdateUserController (e2e)', () => {
 
       const response = await request()
         .put(`/v1/user/${user.id}`)
-        .set('authorization', authInfos.jwt)
+        .set('authorization', `Bearer ${authInfos.access_token}`)
         .send({
           email: conflictingUser.email,
         })

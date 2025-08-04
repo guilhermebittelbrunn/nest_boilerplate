@@ -7,17 +7,22 @@ import { ITokenPayload, ITokenResponse, UserTypeEnum } from '@/shared/types/user
 
 export interface IAuthenticatedUserData {
   userId: string;
-  jwt: string;
+  access_token: string;
+  refresh_token: string;
 }
 
 const jwtService = new JwtService({
   secret: process.env.JWT_SECRET,
 });
 
+const jwtRefreshService = new JwtService({
+  secret: process.env.JWT_REFRESH_SECRET,
+});
+
 async function generateToken(payload: ITokenPayload): Promise<ITokenResponse> {
   return {
     access_token: await jwtService.signAsync(payload),
-    refresh_token: await jwtService.signAsync(payload),
+    refresh_token: await jwtRefreshService.signAsync(payload),
     expires_in: Date.now() + 1000,
     expires_at: Date.now() + 1000,
   };
@@ -42,7 +47,7 @@ export default async function getAuthenticatedUser(): Promise<IAuthenticatedUser
   });
 
   const now = Math.floor(Date.now() / 1000);
-  const { access_token } = await generateToken({
+  const { access_token, refresh_token } = await generateToken({
     sub: user.id,
     email: user.email,
     type: user.type,
@@ -52,6 +57,7 @@ export default async function getAuthenticatedUser(): Promise<IAuthenticatedUser
 
   return {
     userId: user.id,
-    jwt: `Bearer ${access_token}`,
+    access_token,
+    refresh_token,
   };
 }

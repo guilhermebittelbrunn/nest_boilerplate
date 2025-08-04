@@ -28,12 +28,12 @@ class BaseUserMapper extends Mapper<User, UserModelWithRelations, UserDTO> {
     );
   }
 
-  toPersistence(user: User): UserModel {
+  async toPersistence(user: User): Promise<UserModel> {
     return {
       id: user.id.toValue(),
       name: user.name,
       email: user.email.value,
-      password: user.password.value,
+      password: await user.password.getHashedValue(),
       type: user.type.value,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
