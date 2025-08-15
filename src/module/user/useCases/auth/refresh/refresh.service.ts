@@ -21,7 +21,7 @@ export class RefreshService {
     const tokens = await this.jwtService.generateTokens({
       id: user.id.toValue(),
       email: user.email.value,
-      role: user.type.value,
+      type: user.type.value,
     });
 
     return { user, tokens };

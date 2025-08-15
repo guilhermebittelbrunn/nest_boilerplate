@@ -7,7 +7,7 @@ export const JWT_REFRESH_STRATEGY = 'jwt-refresh';
 export interface ITokenPayload {
   sub: string;
   email: string;
-  type: string;
+  type: UserTypeEnum;
   iat: number;
   exp: number;
 }
@@ -17,10 +17,4 @@ export interface ITokenResponse {
   refresh_token: string;
   expires_in: number;
   expires_at: number;
-}
-
-export interface ISessionUser {
-  id: string;
-  email: string;
-  role: UserTypeEnum;
 }
