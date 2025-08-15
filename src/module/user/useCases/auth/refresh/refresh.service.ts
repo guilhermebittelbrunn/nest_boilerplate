@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { IUserRepository, IUserRepositorySymbol } from '@/module/user/repositories/user.repository.interface';
-import GenericErrors from '@/shared/core/logic/GenericErrors';
+import GenericErrors from '@/shared/core/logic/genericErrors';
 import { IJwtService, IJwtServiceSymbol } from '@/shared/services/jwt/jwt.interface';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class RefreshService {
     const tokens = await this.jwtService.generateTokens({
       id: user.id.toValue(),
       email: user.email.value,
-      role: user.type.value,
+      type: user.type.value,
     });
 
     return { user, tokens };

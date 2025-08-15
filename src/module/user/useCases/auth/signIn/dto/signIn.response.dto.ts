@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { ISessionUser } from '@/shared/types/user';
+import { UserDTO } from '@/module/user/dto/user.dto';
 
 class Token {
   @ApiProperty()
@@ -15,7 +15,7 @@ class Token {
 
 export class AuthResponseDto {
   @ApiProperty()
-  user: ISessionUser;
+  user: UserDTO;
 
   @ApiProperty()
   tokens: Token;

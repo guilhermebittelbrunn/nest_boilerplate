@@ -101,6 +101,9 @@ pnpm seed:run
 pnpm dev
 ```
 
+
+_Se, por alguma razão, você receber uma mensagem de erro dizendo algo como "@prisma/client was not initialized" ou "@prisma/client has not exported member" rode o comando `pnpm prisma:generate` ou `pnpm generate`_
+
 O servidor estará disponível em `http://localhost:3000` e o Prisma Studio em `http://localhost:5555`.
 
 ## 📚 Estrutura do Projeto

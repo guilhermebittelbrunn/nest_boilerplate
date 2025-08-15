@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
-import { IJwtService } from '../../jwt.interface';
+import { IGenerateTokenPayload, IJwtService } from '../../jwt.interface';
 
-import { ISessionUser } from '@/shared/types/user';
 import { ACCESS_TOKEN_EXPIRE_DAYS, EXPIRE_TOKEN_TIME, REFRESH_TOKEN_EXPIRE_DAYS } from '@/shared/utils';
 
 @Injectable()
@@ -14,7 +13,7 @@ export class NestJwtService implements IJwtService {
     private readonly jwtService: JwtService,
   ) {}
 
-  public async generateTokens({ id, ...rest }: ISessionUser) {
+  public async generateTokens({ id, ...rest }: IGenerateTokenPayload) {
     const payload = {
       sub: id,
       ...rest,
