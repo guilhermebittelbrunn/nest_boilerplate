@@ -1,8 +1,8 @@
 import { ApiHideProperty, PartialType } from '@nestjs/swagger';
 
-import { TaskDTO } from '@/module/task/dto/task.dto';
+import { CreateTaskDTO } from '../../createTask/dto/createTask.dto';
 
-export class UpdateTaskDTO extends PartialType(TaskDTO) {
+export class UpdateTaskDTO extends PartialType(CreateTaskDTO) {
   @ApiHideProperty()
   id: string;
 }

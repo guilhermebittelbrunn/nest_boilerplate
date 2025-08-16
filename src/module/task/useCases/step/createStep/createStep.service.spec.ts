@@ -40,7 +40,7 @@ describe('CreateStepService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should create a board successfully', async () => {
+  it('should create a step successfully', async () => {
     const board = fakeBoard();
     const step = fakeStep({ boardId: board.id.toValue() });
 

@@ -2,9 +2,10 @@ import { prisma } from '@database/index';
 import { faker } from '@faker-js/faker';
 import { TaskModel } from '@prisma/client';
 
+import { insertFakeStep } from './fakeStep';
+
 import Task from '@/module/task/domain/task/task';
 import TaskPriority from '@/module/task/domain/task/taskPriority';
-import { insertFakeBoard } from '@/module/task/repositories/tests/entities/fakeBoard';
 import UniqueEntityID from '@/shared/core/domain/UniqueEntityID';
 import { TaskPriorityEnum } from '@/shared/types/task/task';
 
@@ -27,17 +28,16 @@ export async function insertFakeTask(overrides: Partial<TaskModel> = {}): Promis
   const task = fakeTask(overrides);
 
   if (!overrides.stepId) {
-    const board = await insertFakeBoard();
-    overrides.stepId = board.id;
+    const step = await insertFakeStep();
+    overrides.stepId = step.id;
   }
 
   return prisma.taskModel.create({
     data: {
       id: task.id.toValue(),
       title: task.title,
-      stepId: task.stepId.toValue(),
+      stepId: overrides.stepId ?? task.stepId.toValue(),
       description: task.description,
-      assigneeId: task.assigneeId?.toValue(),
       dueDate: task.dueDate,
       priority: task.priority?.value,
       ...overrides,
