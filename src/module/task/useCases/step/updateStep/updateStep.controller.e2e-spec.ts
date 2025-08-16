@@ -2,7 +2,7 @@ import { prisma } from '@database/index';
 import { faker } from '@faker-js/faker';
 import { HttpStatus } from '@nestjs/common';
 
-import { insertFakeBoard } from '@/module/task/repositories/tests/entities/fakeBoard';
+import { insertFakeStep } from '@/module/task/repositories/tests/entities/fakeStep';
 import { IAuthenticatedUserData } from '@/shared/test/helpers/getAuthenticatedUser';
 import getAuthenticatedUser from '@/shared/test/helpers/getAuthenticatedUser';
 import { request } from '@/shared/test/utils';
@@ -14,27 +14,28 @@ describe('UpdateStepController (e2e)', () => {
     authInfos = await getAuthenticatedUser();
   });
 
-  describe('PUT /v1/board/:id', () => {
-    it('should update a board successfully', async () => {
-      const board = await insertFakeBoard();
+  describe('PUT /v1/step/:id', () => {
+    it('should update a step successfully', async () => {
+      const step = await insertFakeStep();
+
       const newName = faker.person.fullName();
 
-      const result = await request()
-        .put(`/v1/board/${board.id}`)
+      const response = await request()
+        .put(`/v1/step/${step.id}`)
         .set('authorization', `Bearer ${authInfos.access_token}`)
         .send({
           name: newName,
         })
         .expect(HttpStatus.OK);
 
-      const updatedBoard = await prisma.boardModel.findUnique({
+      const updatedStep = await prisma.stepModel.findUnique({
         where: {
-          id: board.id,
+          id: step.id,
         },
       });
 
-      expect(result.body.data.id).toBe(board.id);
-      expect(updatedBoard.name).toBe(newName);
+      expect(response.body.data.id).toBe(step.id);
+      expect(updatedStep.name).toBe(newName);
     });
   });
 });

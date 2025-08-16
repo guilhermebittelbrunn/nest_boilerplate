@@ -24,6 +24,17 @@ export class BoardRepository
     super('boardModel', prisma, als);
   }
 
+  async findCompleteById(id: GenericId): Promise<Board | null> {
+    const board = await this.prisma.boardModel.findUnique({
+      where: { id: UniqueEntityID.raw(id) },
+      include: {
+        steps: {},
+      },
+    });
+
+    return this.mapper.toDomainOrNull(board);
+  }
+
   async findByIdentifier(identifier: string, userId?: GenericId): Promise<Board | null> {
     const board = await this.prisma.boardModel.findFirst({
       where: {

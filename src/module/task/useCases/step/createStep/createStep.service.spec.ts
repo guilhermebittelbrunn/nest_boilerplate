@@ -45,7 +45,7 @@ describe('CreateStepService', () => {
     const step = fakeStep({ boardId: board.id.toValue() });
 
     stepRepoMock.findByIdentifier.mockResolvedValueOnce(null);
-    boardRepoMock.findById.mockResolvedValueOnce(board);
+    boardRepoMock.findCompleteById.mockResolvedValueOnce(board);
     stepRepoMock.create.mockResolvedValueOnce(step);
 
     const result = await service.execute({
@@ -54,7 +54,7 @@ describe('CreateStepService', () => {
     });
 
     expect(result).toBe(step);
-    expect(boardRepoMock.findById).toHaveBeenCalledWith(step.boardId.toValue());
+    expect(boardRepoMock.findCompleteById).toHaveBeenCalledWith(step.boardId.toValue());
     expect(stepRepoMock.findByIdentifier).toHaveBeenCalledWith(step.name, step.boardId.toValue());
   });
 
@@ -62,7 +62,7 @@ describe('CreateStepService', () => {
     const board = fakeBoard();
     const step = fakeStep({ boardId: board.id.toValue() });
 
-    boardRepoMock.findById.mockResolvedValueOnce(board);
+    boardRepoMock.findCompleteById.mockResolvedValueOnce(board);
     stepRepoMock.findByIdentifier.mockResolvedValueOnce(step);
 
     await expect(
@@ -72,12 +72,12 @@ describe('CreateStepService', () => {
       }),
     ).rejects.toThrow(CreateStepErrors.StepAlreadyExists);
 
-    expect(boardRepoMock.findById).toHaveBeenCalledWith(step.boardId.toValue());
+    expect(boardRepoMock.findCompleteById).toHaveBeenCalledWith(step.boardId.toValue());
     expect(stepRepoMock.findByIdentifier).toHaveBeenCalledWith(step.name, step.boardId.toValue());
   });
 
   it('should throw a not found error if board not found', async () => {
-    boardRepoMock.findById.mockResolvedValueOnce(null);
+    boardRepoMock.findCompleteById.mockResolvedValueOnce(null);
 
     await expect(
       service.execute({
@@ -85,5 +85,23 @@ describe('CreateStepService', () => {
         name: faker.person.fullName(),
       }),
     ).rejects.toThrow(CreateStepErrors.BoardNotFound);
+  });
+
+  it('should throw a conflict error if max steps reached', async () => {
+    const board = fakeBoard();
+    const steps = Array.from({ length: 20 }, () => fakeStep({ boardId: board.id.toValue() }));
+
+    board.steps = steps;
+
+    boardRepoMock.findCompleteById.mockResolvedValueOnce(board);
+
+    await expect(
+      service.execute({
+        boardId: board.id.toValue(),
+        name: faker.person.fullName(),
+      }),
+    ).rejects.toThrow(CreateStepErrors.MaxStepsReached);
+
+    expect(boardRepoMock.findCompleteById).toHaveBeenCalledWith(board.id.toValue());
   });
 });

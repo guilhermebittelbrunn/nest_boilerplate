@@ -9,6 +9,7 @@ export interface ListBoardByQuery extends PaginationQuery {
 }
 
 export interface IBoardRepository extends IBaseRepository<Board> {
+  findCompleteById(id: GenericId): SingleEntityResponse<Board>;
   findByIdentifier(identifier: string, userId?: GenericId): SingleEntityResponse<Board>;
   list(dto: ListBoardByQuery): Promise<PaginatedResult<Board>>;
 }

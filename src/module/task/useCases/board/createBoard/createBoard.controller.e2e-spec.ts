@@ -19,33 +19,35 @@ describe('CreateBoardController (e2e)', () => {
         name: faker.person.fullName(),
       };
 
-      const result = await request()
+      const response = await request()
         .post(`/v1/board`)
         .set('authorization', `Bearer ${authInfos.access_token}`)
         .send(payload)
-        .expect(HttpStatus.OK);
+        .expect(HttpStatus.CREATED);
 
       const createdBoard = await prisma.boardModel.findUnique({
         where: {
-          id: result.body.data.id,
+          id: response.body.data.id,
         },
       });
 
-      expect(result.body.data.id).toBe(createdBoard.id);
-      expect(result.body.data.name).toBe(payload.name);
-      expect(result.body.data.ownerId).toBe(authInfos.userId);
+      expect(response.body.data.id).toBe(createdBoard.id);
+      expect(response.body.data.name).toBe(payload.name);
+      expect(response.body.data.ownerId).toBe(authInfos.userId);
     });
 
     it('should return an error when payload is not valid', async () => {
       const payload = {
-        name: '',
+        name: null,
       };
 
-      await request()
+      const response = await request()
         .post(`/v1/board`)
         .set('authorization', `Bearer ${authInfos.access_token}`)
         .send(payload)
         .expect(HttpStatus.BAD_REQUEST);
+
+      expect(response.body.message).toContain('nome informado deve ser um texto válido');
     });
   });
 });

@@ -29,7 +29,7 @@ export async function insertFakeBoard(overrides: Partial<BoardModel> = {}): Prom
     data: {
       id: board.id.toValue(),
       name: board.name,
-      ownerId: board.ownerId.toValue(),
+      ownerId: overrides.ownerId ?? board.ownerId.toValue(),
       ...overrides,
     },
   });

@@ -15,7 +15,7 @@ import { UpdateResponseDTO } from '@/shared/types/common';
 export class CreateStepController {
   constructor(private readonly useCase: CreateStepService) {}
 
-  @Post('/')
+  @Post()
   async handle(@ValidatedBody() body: CreateStepDTO): Promise<UpdateResponseDTO> {
     const step = await this.useCase.execute(body);
 

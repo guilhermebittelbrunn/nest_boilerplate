@@ -12,6 +12,12 @@ export namespace CreateStepErrors {
       super(`Já existe uma etapa com o nome ${name} no quadro ${boardName}`);
     }
   }
+
+  export class MaxStepsReached extends GenericErrors.Conflict {
+    constructor(boardName: string, maxSteps: number) {
+      super(`O quadro ${boardName} já atingiu o número máximo de etapas permitidas (${maxSteps})`);
+    }
+  }
 }
 
 export default CreateStepErrors;

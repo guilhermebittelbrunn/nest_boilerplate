@@ -18,7 +18,20 @@ export class StepRepository extends BaseRepository<'stepModel', Step, StepModel>
   mapper = StepMapper;
 
   constructor(prisma: PrismaService, als: Als) {
-    super('boardModel', prisma, als);
+    super('stepModel', prisma, als);
+  }
+
+  async findCompleteById(id: GenericId): Promise<Step | null> {
+    const step = await this.prisma.stepModel.findUnique({
+      where: {
+        id: UniqueEntityID.raw(id),
+      },
+      include: {
+        tasks: true,
+      },
+    });
+
+    return this.mapper.toDomainOrNull(step);
   }
 
   async findByIdentifier(identifier: string, boardId?: GenericId): Promise<Step | null> {

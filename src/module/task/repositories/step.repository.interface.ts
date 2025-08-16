@@ -9,6 +9,7 @@ export interface ListStepByQuery extends PaginationQuery {
 }
 
 export interface IStepRepository extends IBaseRepository<Step> {
+  findCompleteById(id: GenericId): SingleEntityResponse<Step>;
   findByIdentifier(identifier: string, boardId?: GenericId): SingleEntityResponse<Step>;
   list(dto: ListStepByQuery): Promise<PaginatedResult<Step>>;
 }
