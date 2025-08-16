@@ -9,5 +9,8 @@ model UserModel {
   updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz()
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz()
 
+  tasks  TaskModel[]
+  boards BoardModel[]
+
   @@map("user")
 }
